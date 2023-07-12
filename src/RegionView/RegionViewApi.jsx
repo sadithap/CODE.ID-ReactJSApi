@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import RegionApi from "../api/RegionApi";
 import RegionCreate from "./RegionCreate";
-import RegionUpdate from "./RegionUpdate";
 
 export default function RegionViewApi() {
   const [region, setRegion] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [display, setDisplay] = useState(false);
-  const [edit, setEdit]= useState(false);
-  const [regID, setRegID]= useState(0);
   useEffect(() => {
     RegionApi.list().then((data) => {
       setRegion(data);
@@ -21,10 +18,6 @@ export default function RegionViewApi() {
       setRefresh(true);
     });
   };
-  const onEdit = async (id) => {
-    setRegID(id);
-    setEdit(true);
-  }
   return (
     <div>
       {display ? (
@@ -48,17 +41,10 @@ export default function RegionViewApi() {
                         Delete
                       </button>
                     </td>
-                    <td>
-                      <button onClick={() => onEdit(reg.regionId)}>
-                        Edit
-                      </button>
-                    </td>
                   </tr>
                 ))}
             </tbody>
           </table>
-          {edit && <RegionUpdate setEdit={setEdit} setRefresh={setRefresh} regID={regID}/>}
-          
         </>
       )}
     </div>

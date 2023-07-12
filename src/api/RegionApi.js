@@ -28,12 +28,12 @@ const create = async(payload) => {
     }
 }
 
-const update = async(id,payload) => {
+const upload = async(payload) => {
   try {
-    const result = await axios.put(`${config.domain}/regions/${id}`,payload)
-        return result
+    const result = await axios.post(`${config.domain}/regions/upload`,payload)
+    return result
   } catch (error) {
-    return await error.message;
+    return await error.message
   }
 }
-export default { list, deleted, create,update };
+export default { list, deleted, create, upload };

@@ -36,4 +36,15 @@ const upload = async(payload) => {
     return await error.message
   }
 }
-export default { list, deleted, create, upload };
+
+const update = async(payload) => {
+  const id=payload.get("id");
+  try {
+    const result = await axios.put(`${config.domain}/regions/${id}`,payload)
+        return result
+  } catch (error) {
+    return await error.message;
+  }
+}
+
+export default { list, deleted, create, upload, update };

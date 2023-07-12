@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetRegionRequest } from "../ReduxSaga/Action/RegionAction";
+import { DeleteRegionRequest, GetRegionRequest } from "../ReduxSaga/Action/RegionAction";
 import FormikSagaRegion from "./FormikSagaRegion";
+import UpdateRegion from "./UpdateRegion";
 export default function RegionSagaView() {
   const dispatch = useDispatch();
   const { regions } = useSelector((state) => state.regionState);
   const [display, setDisplay] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [edit, setEdit]= useState(false);
+  const [regID, setRegID]= useState(0);
 
   useEffect(() => {
     dispatch(GetRegionRequest());
-  }, [refresh]);
+  }, [dispatch]);
+
+  const onEdit = async (id) => {
+    setRegID(id);
+    setEdit(true);
+  }
+
+  const onDelete = async (id) => {
+    dispatch(DeleteRegionRequest(id))
+    setRefresh(true)
+  };
 
   return (
     <div>
@@ -31,12 +44,18 @@ export default function RegionSagaView() {
                     <td>{reg.regionId}</td>
                     <td>{reg.regionName}</td>
                     <td>
-                      <button>Delete</button>
+                      <button onClick={() => onDelete(reg.regionId)}>Delete</button>
+                    </td>
+                    <td>
+                      <button onClick={() => onEdit(reg.regionId)}>
+                        Edit
+                      </button>
                     </td>
                   </tr>
                 ))}
             </tbody>
           </table>
+          {edit && <UpdateRegion setEdit={setEdit} setRefresh={setRefresh} regID={regID}/>}
         </>
       )}
     </div>

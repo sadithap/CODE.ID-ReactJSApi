@@ -14,6 +14,14 @@ const RegionReducer = (state = INIT_STATE, action) => {
             return {...state}
         case ActionType.ADD_REGION_SUCCESS:
             return AddRegionSuccessfully(state,action)
+        case ActionType.UPDATE_REGION_REQUEST:
+            return {...state}
+        case ActionType.UPDATE_REGION_SUCCESS:
+            return UpdateRegionSuccessfully(state,action)
+        case ActionType.DELETE_REGION_REQUEST:
+            return {...state}
+        case ActionType.DELETE_REGION_SUCCESS:
+            return DeleteRegionSuccessfully(state,action)
         default:
             return {...state}
     }
@@ -30,6 +38,23 @@ const AddRegionSuccessfully = (state,action) => {
     return {
         ...state,
         regions:[...state.regions, action.payload]
+    }
+}
+
+const UpdateRegionSuccessfully = (state,action) => {
+    return {
+        ...state,
+        regions:[...state.regions, action.payload]
+    }
+}
+
+const DeleteRegionSuccessfully = (state,action) => {
+    
+    const updatedData = state.regions.filter((row) => row.regionId !== action.payload);
+    console.log(updatedData);
+    return {
+        ...state,
+        regions:updatedData
     }
 }
 

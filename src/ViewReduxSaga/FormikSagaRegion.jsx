@@ -16,9 +16,10 @@ export default function FormikSagaRegion(props) {
       let payload = new FormData();
       payload.append("name", values.name);
       payload.append("file", values.file);
+      console.log(payload.get("name"));
       dispatch(AddRegionRequest(payload));
       props.setDisplay(false);
-      window.alert("Data Successfully Insert");
+      window.alert(`Data Successfully Insert `+values.name);
       props.setRefresh(true);
     },
   });
@@ -39,6 +40,7 @@ export default function FormikSagaRegion(props) {
   };
   return (
     <div>
+      <form onSubmit={formik.handleSubmit}>
       <div>
         <label>Region Name</label>
         <input
@@ -75,14 +77,15 @@ export default function FormikSagaRegion(props) {
           </label>
         </div>
         <div>
-          <button type="submit" onClick={formik.handleSubmit}>
+          <button type="submit">
             Simpan
           </button>
-          <button type="submit" onClick={() => props.setDisplay(false)}>
+          <button onClick={() => props.setDisplay(false)}>
             Cancel
           </button>
         </div>
       </div>
+      </form>
     </div>
   );
 }

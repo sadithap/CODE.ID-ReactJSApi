@@ -29,6 +29,8 @@ const create = async(payload) => {
 }
 
 const upload = async(payload) => {
+  console.log(payload.get("file"))
+  console.log(payload.get("name"))
   try {
     const result = await axios.post(`${config.domain}/regions/upload`,payload)
     return result
@@ -39,9 +41,17 @@ const upload = async(payload) => {
 
 const update = async(payload) => {
   const id=payload.get("id");
+  console.log(id)
+  console.log(payload.get("file"))
+  console.log(payload.get("name"))
   try {
-    const result = await axios.put(`${config.domain}/regions/${id}`,payload)
-        return result
+    const result = await axios.put(`${config.domain}/regions/${id}`,payload,{
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    const result1 = await axios.get(`${config.domain}/regions/${id}`);
+    return result1
   } catch (error) {
     return await error.message;
   }

@@ -5,22 +5,40 @@ import { UpdateRegionRequest } from "../ReduxSaga/Action/RegionAction";
 
 export default function UpdateRegion(props) {
   const dispatch = useDispatch();
+  const [previewImg, setPreviewImage] = useState();
+  const [upload, setUpload] = useState(false);
   const formik = useFormik({
     initialValues: {
-      name: '',
+      name: undefined,
+      file: undefined,
       id: undefined,
     },
     onSubmit: async (values) => {
-        const id=props.regID;
-        let payload = new FormData();
-        payload.append("name", values.name);
-        payload.append("id", id);
-        dispatch(UpdateRegionRequest(payload));
-        props.setRefresh(true);
-        props.setEdit(false)
-        window.alert(`Data Successfully Update`);
+      let payload = new FormData();
+      payload.append("name", values.name);
+      payload.append("file", values.file);
+      payload.append("id", props.regID);
+      dispatch(UpdateRegionRequest(payload));
+      props.setEdit(false);
+      window.alert(`Data Successfully Update `+values.name);
+      props.setRefresh(true);
     },
   });
+  const uploadConfig = (name) => (event) => {
+    let reader = new FileReader();
+    const file = event.target.files[0];
+    reader.onload = () => {
+      formik.setFieldValue("file", file);
+      setPreviewImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+    setUpload(true);
+  };
+  const onClear = (event) => {
+    event.preventDefault();
+    setPreviewImage();
+    setUpload(false);
+  };
   
   return (
     <div>
@@ -36,6 +54,30 @@ export default function UpdateRegion(props) {
         ></input>
       </div>
       <div>
+      <label>Photo</label>
+        <div>
+          {upload === false ? (
+            <>
+              <span>Kosong</span>
+            </>
+          ) : (
+            <>
+              <img src={previewImg} alt="img"></img>
+              <span onClick={onClear}>Remove</span>
+            </>
+          )}
+        </div>
+        <div>
+          <label>
+            <span>upload a file</span>
+            <input
+              id="file-upload"
+              name="file-upload"
+              type="file"
+              onChange={uploadConfig("file")}
+            ></input>
+          </label>
+        </div>
         <div>
           <button type="submit">
             Simpan

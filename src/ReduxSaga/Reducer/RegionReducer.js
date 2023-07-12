@@ -42,9 +42,14 @@ const AddRegionSuccessfully = (state,action) => {
 }
 
 const UpdateRegionSuccessfully = (state,action) => {
+    const updatedRegion = action.payload;
+    const updatedRegions = state.regions.map((region) =>
+    region.regionId === updatedRegion.regionId ? updatedRegion : region
+    );
+    
     return {
         ...state,
-        regions:[...state.regions, action.payload]
+        regions:updatedRegions
     }
 }
 
